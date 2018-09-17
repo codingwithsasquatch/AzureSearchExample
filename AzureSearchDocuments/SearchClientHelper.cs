@@ -41,6 +41,9 @@ namespace AzureSearchDocuments
                     SearchMode = SearchMode.Any,
                     //Top = 0,
                     Facets = new List<String>() { $"{facetName}" },
+                    HighlightPreTag = "<em><b>",
+                    HighlightPostTag="</b></em>",                    
+                    HighlightFields= new List<String>() { "text" },
                     QueryType = QueryType.Full
                 };
 
@@ -76,7 +79,9 @@ namespace AzureSearchDocuments
    from r in response.Results
    select new JObject(
         new JProperty("score", r.Score),
-        new JProperty("highlights", r.Highlights),
+        new JProperty("highlights", r.Highlights !=null ? 
+            new JObject(r.Highlights.Select(field => new JProperty(field.Key, field.Value))):
+            null),
         new JProperty("document", 
         new JObject(r.Document.Select(field => new JProperty(field.Key, field.Value)))
               )))),
@@ -84,6 +89,8 @@ namespace AzureSearchDocuments
 
 );
                 }
+
+                
 
                 return dataset;
             }

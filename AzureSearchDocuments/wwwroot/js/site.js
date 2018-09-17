@@ -364,7 +364,19 @@ function UpdateDetails(data) {
     for (var i = 0; i < data.results.length; i++) {
 
         var result = data.results[i].document;
+		var highlights = data.results[i].highlights;
         result.idx = i;
+		
+		var highlighttext = "";
+		if (highlights!=null)
+		{
+		 for (var h = 0; h < highlights.text.length; h++) 
+			 {
+				highlighttext = highlighttext +  highlights.text[h];
+			 }
+		} 
+	    else
+			highlighttext = result.text.substring(0, 300);
 
         var filenName = result.fileName;
         var len = filenName.length-4;
@@ -383,7 +395,7 @@ function UpdateDetails(data) {
         }*/
 
         var content = result.text;
-        var excerpt = result.text.substring(0, 300);
+             var excerpt = highlighttext;
 
         if (path !== null) {
 
